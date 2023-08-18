@@ -9,5 +9,4 @@ public class LoanApplicationProjectApplication {
 		SpringApplication.run(LoanApplicationProjectApplication.class, args);
 		System.out.println("helloo shital here");
 	}
-
 }
