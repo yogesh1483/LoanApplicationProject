@@ -18,38 +18,32 @@ import com.loanapp.main.servicei.Customer_Service;
 @RestController
 @RequestMapping("/AddCust")
 public class Customer_Controller {
-	
+
 	@Autowired
 	Customer_Service cs;
-	
-	@PostMapping(value="/AddCustomer")
-	public ResponseEntity<Customer> addCustomer(@RequestPart("cust") String cust,
-															@RequestPart("pan") MultipartFile pan,
-															@RequestPart("photo") MultipartFile photo,
-															@RequestPart("adhar") MultipartFile adhar,
-															@RequestPart("salaryslip") MultipartFile salaryslip,
-															@RequestPart("signature") MultipartFile signature,
-															@RequestPart("addproof") MultipartFile addproof
-														   ) throws ClassCastException, IOException{
-		
-		AllPersonalDocuments d=new AllPersonalDocuments();
+
+	@PostMapping(value = "/AddCustomer")
+	public ResponseEntity<Customer> addCustomer(@RequestPart("cust") String cust, @RequestPart("pan") MultipartFile pan,
+			@RequestPart("photo") MultipartFile photo, @RequestPart("adhar") MultipartFile adhar,
+			@RequestPart("salaryslip") MultipartFile salaryslip, @RequestPart("signature") MultipartFile signature,
+			@RequestPart("addproof") MultipartFile addproof) throws ClassCastException, IOException {
+
+		AllPersonalDocuments d = new AllPersonalDocuments();
 		d.setPanCard(pan.getBytes());
 		d.setPhoto(photo.getBytes());
 		d.setAddharCard(adhar.getBytes());
 		d.setSalarySlips(salaryslip.getBytes());
 		d.setSignature(signature.getBytes());
 		d.setAddressProof(addproof.getBytes());
-		
-		
+
 		ObjectMapper om = new ObjectMapper();
-		Customer c= om.readValue(cust, Customer.class);
-		
-		    c.setApplicationStatus(String.valueOf(CibilStatus.pending));
-			c.setAllPersonalDoc(d);
-			
-			
-	   return new ResponseEntity<Customer>(cs.setCustomer(c),HttpStatus.OK);
-		
+		Customer c = om.readValue(cust, Customer.class);
+
+		c.setApplicationStatus(String.valueOf(CibilStatus.pending));
+		c.setAllPersonalDoc(d);
+
+		return new ResponseEntity<Customer>(cs.setCustomer(c), HttpStatus.OK);
+
 	}
-		
+
 }
