@@ -26,26 +26,38 @@ public class Customer {
 	private String customerEmail;
 	private double customerMobileNumber;
 	private double customerTotalLoanRequired;
+	private String applicationStatus;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private AllPersonalDocuments allPersonalDoc;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private CustomerAddress customerAddress;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private Profession profession;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private Cibil cibilScore;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private CurrentLoanDetails currentLoanDetails;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private AccountDetails accountDetails;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private GuarantorDetails gurantorDetails;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private LoanDisbursement loanDisbursement;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private Ledger ledger;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private SanctionLetter sanctionLetter;
+	
 	@OneToOne(cascade=CascadeType.ALL)
 	private CustomerVerification customerverification;
 }
