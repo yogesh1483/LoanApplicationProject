@@ -43,7 +43,6 @@ public class Customer_Controller {
 		c.setAllPersonalDoc(d);
 
 		return new ResponseEntity<Customer>(cs.setCustomer(c), HttpStatus.OK);
-
 	}
 
 }
