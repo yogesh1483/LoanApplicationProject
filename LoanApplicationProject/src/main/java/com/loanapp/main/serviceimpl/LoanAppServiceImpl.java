@@ -81,4 +81,11 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		return er.save(enquiryDetails);
 	}
 
+	@Override
+	public Users getusers(String userName, String userPassword) {
+		
+		
+		return ur.findAllByUserNameAndUserPassword(userName, userPassword);
+	}
+
 }

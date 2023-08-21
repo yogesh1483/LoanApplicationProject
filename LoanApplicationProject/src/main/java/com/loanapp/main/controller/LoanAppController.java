@@ -36,29 +36,29 @@ public class LoanAppController {
 	@Autowired
 	LoanAppServiceI loanAppServiceI;
 	
-	@PostMapping("/addAdmin")
-	public ResponseEntity<BaseResponse<Admin>> addAdmin(@RequestPart("admin") String adminJson,
-			@RequestPart("profile") MultipartFile profileimg){
-		ObjectMapper om = new ObjectMapper();
-		try {
-			Admin admin = om.readValue(adminJson, Admin.class);
-			Admin adb = loanAppServiceI.saveAdmin(admin, profileimg);
-			return new ResponseEntity<BaseResponse<Admin>>
-			(new BaseResponse<Admin>(201, "Admin Added Successfully", new Date(), adb), HttpStatus.CREATED);
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	@PostMapping("/addAdmin")
+//	public ResponseEntity<BaseResponse<Admin>> addAdmin(@RequestPart("admin") String adminJson,
+//			@RequestPart("profile") MultipartFile profileimg){
+//		ObjectMapper om = new ObjectMapper();
+//		try {
+//			Admin admin = om.readValue(adminJson, Admin.class);
+//			Admin adb = loanAppServiceI.saveAdmin(admin, profileimg);
+//			return new ResponseEntity<BaseResponse<Admin>>
+//			(new BaseResponse<Admin>(201, "Admin Added Successfully", new Date(), adb), HttpStatus.CREATED);
+//		} catch (JsonProcessingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 	
-	@GetMapping("/adminLogin/{ausername}/{apassword}")
-	public ResponseEntity<BaseResponse<List<Admin>>> adminLogin(@PathVariable String ausername, @PathVariable String apassword) throws UserNotFoundException{
-		List<Admin> ad = loanAppServiceI.adminLogin(ausername, apassword);
-		return new ResponseEntity<BaseResponse<List<Admin>>>(
-				new BaseResponse<List<Admin>>(200, "Admin Present", new Date(), ad), HttpStatus.OK);
-	}
-	
+//	@GetMapping("/adminLogin/{ausername}/{apassword}")
+//	public ResponseEntity<BaseResponse<List<Admin>>> adminLogin(@PathVariable String ausername, @PathVariable String apassword) throws UserNotFoundException{
+//		List<Admin> ad = loanAppServiceI.adminLogin(ausername, apassword);
+//		return new ResponseEntity<BaseResponse<List<Admin>>>(
+//				new BaseResponse<List<Admin>>(200, "Admin Present", new Date(), ad), HttpStatus.OK);
+//	}
+//	
 	
 	@PostMapping("/addUser")
 	public ResponseEntity<BaseResponse<Users>> addUser(@RequestPart("user") String userJson,
@@ -86,6 +86,17 @@ public class LoanAppController {
 		
 	}
 	
+	@GetMapping("/getusers/{userName}/{userPassword}")
+	public ResponseEntity<BaseResponse<Users>>getusers(@PathVariable String userName,
+			@PathVariable String userPassword )
+	{
+				
+	Users u	=loanAppServiceI.getusers(userName,userPassword);
+			
+		return new ResponseEntity<BaseResponse<Users>>
+		(new BaseResponse<Users>(201, "Enquiry Received Successfully", new Date(), u), HttpStatus.CREATED);
+		
+	}
 	
 	
 	

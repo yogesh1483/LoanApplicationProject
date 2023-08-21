@@ -20,4 +20,6 @@ public interface LoanAppServiceI {
 
 	EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails);
 
+	Users getusers(String userName, String userPassword);
+
 }
