@@ -57,7 +57,7 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
-		if(user!=null) {
+		if(user.getUserType()==null) {
 		try {
 			user.setProfileImg(profileImg.getBytes());
 			user.setUserName(user.getName()+""+user.getUserType()+"@"+rm.nextInt(4444));
