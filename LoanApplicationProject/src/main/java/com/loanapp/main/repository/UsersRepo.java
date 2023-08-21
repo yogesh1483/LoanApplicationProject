@@ -6,6 +6,6 @@ import com.loanapp.main.entity.Users;
 
 public interface UsersRepo extends JpaRepository<Users, Integer>{
 	
-	
+	Users findAllByUserNameAndUserPassword(String userName,String userPassword);
 
 }
