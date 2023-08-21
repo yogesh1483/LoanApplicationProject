@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loanapp.main.entity.Admin;
+import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
 import com.loanapp.main.exception.UserNotFoundException;
 import com.loanapp.main.repository.AdminRepo;
+import com.loanapp.main.repository.EnquiryDetailsRepo;
 import com.loanapp.main.repository.UsersRepo;
 import com.loanapp.main.servicei.LoanAppServiceI;
 
@@ -26,6 +28,8 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	AdminRepo ar;
 	@Autowired
 	UsersRepo ur;
+	@Autowired
+	EnquiryDetailsRepo er;
 	
 	@Override
 	public Admin saveAdmin(Admin admin, MultipartFile profileimg) {
@@ -69,6 +73,12 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails) {
+		
+		return er.save(enquiryDetails);
 	}
 
 }
