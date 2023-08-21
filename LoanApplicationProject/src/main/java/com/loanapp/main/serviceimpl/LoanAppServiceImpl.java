@@ -7,10 +7,13 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
 import com.loanapp.main.exception.UserNotFoundException;
+import com.loanapp.main.repository.ContactUsRepo;
 import com.loanapp.main.repository.EnquiryDetailsRepo;
 import com.loanapp.main.repository.UsersRepo;
 import com.loanapp.main.servicei.LoanAppServiceI;
@@ -25,6 +28,8 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	UsersRepo ur;
 	@Autowired
 	EnquiryDetailsRepo er;
+	@Autowired
+	ContactUsRepo cr;
 
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
@@ -58,5 +63,20 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		
 		return ur.findAllByUserNameAndUserPassword(userName, userPassword);
 	}
+
+	@Override
+	public ContactUs addEnquiryDetails(ContactUs contactUs) {
+		
+		return cr.save(contactUs);
+	}
+
+	@Override
+	public List<EnquiryDetails> getEnquiry() {
+		
+		return er.findAll();
+	}
+
+	
+	
 
 }
