@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,14 +33,28 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	EnquiryDetailsRepo er;
 	@Autowired
 	ContactUsRepo cr;
+	@Autowired JavaMailSender sender;
+	
+	@Value("$spring.mail.username")
+	private String formMail;
 
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
-		if(user.getUserType()==null) {
+		if(user.getUserType()!=null) {
 		try {
 			user.setProfileImg(profileImg.getBytes());
 			user.setUserName(user.getName()+""+user.getUserType()+"@"+rm.nextInt(4444));
 			user.setUserPassword(user.getUserType()+"@"+rm.nextInt(1111));
+			
+			SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+			simpleMailMessage.setFrom(formMail);
+			simpleMailMessage.setTo(user.getUserEmail());
+			simpleMailMessage.setSubject("Loan Application Username And Password");
+			simpleMailMessage.setText("Hello"+user.getName()+"\t Your Username: "+user.getUserName()+"/t And Password: "+user.getUserPassword());
+			sender.send(simpleMailMessage);
+			
+
+			
 			return ur.save(user);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
