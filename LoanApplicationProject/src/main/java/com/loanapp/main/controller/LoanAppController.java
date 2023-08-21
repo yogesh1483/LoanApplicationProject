@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loanapp.main.entity.BaseResponse;
+import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
@@ -69,5 +70,24 @@ public class LoanAppController {
 				new BaseResponse<Users>(201, "Enquiry Received Successfully", new Date(), u), HttpStatus.CREATED);
 
 	}
+	@PostMapping("/addContactInfo")
+	public ResponseEntity<BaseResponse<ContactUs>> addContactInfo(@RequestBody ContactUs contactUs)
+	{
+	  ContactUs add = loanAppServiceI.addEnquiryDetails(contactUs);
+		return new ResponseEntity<BaseResponse<ContactUs>>(
+				new BaseResponse<ContactUs>(201, "Contact save Successfully", new Date(), contactUs),
+				HttpStatus.CREATED);
+     }
+	
+	@GetMapping("/getEnquiry")
+	public ResponseEntity<BaseResponse<List<EnquiryDetails>>> viewEnquiry()
+	{   
+		List<EnquiryDetails> list = loanAppServiceI.getEnquiry();
+		return new ResponseEntity<BaseResponse<List<EnquiryDetails>>>(
+				new BaseResponse<List<EnquiryDetails>>(201, "Enquiry Received Successfully", new Date(), list), HttpStatus.CREATED);
+
+		
+	}
 
 }
+ 
