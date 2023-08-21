@@ -19,14 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.loanapp.main.entity.Admin;
 import com.loanapp.main.entity.BaseResponse;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
 import com.loanapp.main.exception.UserNotFoundException;
 import com.loanapp.main.servicei.LoanAppServiceI;
-
 
 @RestController
 @RequestMapping("/loanapp")
@@ -35,75 +33,41 @@ public class LoanAppController {
 
 	@Autowired
 	LoanAppServiceI loanAppServiceI;
-	
-//	@PostMapping("/addAdmin")
-//	public ResponseEntity<BaseResponse<Admin>> addAdmin(@RequestPart("admin") String adminJson,
-//			@RequestPart("profile") MultipartFile profileimg){
-//		ObjectMapper om = new ObjectMapper();
-//		try {
-//			Admin admin = om.readValue(adminJson, Admin.class);
-//			Admin adb = loanAppServiceI.saveAdmin(admin, profileimg);
-//			return new ResponseEntity<BaseResponse<Admin>>
-//			(new BaseResponse<Admin>(201, "Admin Added Successfully", new Date(), adb), HttpStatus.CREATED);
-//		} catch (JsonProcessingException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
-	
-//	@GetMapping("/adminLogin/{ausername}/{apassword}")
-//	public ResponseEntity<BaseResponse<List<Admin>>> adminLogin(@PathVariable String ausername, @PathVariable String apassword) throws UserNotFoundException{
-//		List<Admin> ad = loanAppServiceI.adminLogin(ausername, apassword);
-//		return new ResponseEntity<BaseResponse<List<Admin>>>(
-//				new BaseResponse<List<Admin>>(200, "Admin Present", new Date(), ad), HttpStatus.OK);
-//	}
-//	
-	
+
 	@PostMapping("/addUser")
 	public ResponseEntity<BaseResponse<Users>> addUser(@RequestPart("user") String userJson,
-			@RequestPart("profile") MultipartFile profileImg) throws UserCanNotCreatedException
-	{
+			@RequestPart("profile") MultipartFile profileImg) throws UserCanNotCreatedException {
 		ObjectMapper om = new ObjectMapper();
 		try {
 			Users user = om.readValue(userJson, Users.class);
-			Users udb=loanAppServiceI.saveUser(user,profileImg);
-			return new ResponseEntity<BaseResponse<Users>>
-			(new BaseResponse<Users>(201, "User Created Successfully", new Date(), udb), HttpStatus.CREATED);
+			Users udb = loanAppServiceI.saveUser(user, profileImg);
+			return new ResponseEntity<BaseResponse<Users>>(
+					new BaseResponse<Users>(201, "User Created Successfully", new Date(), udb), HttpStatus.CREATED);
 		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
+
 	@PostMapping("/addEnquiryDetails")
-	public ResponseEntity<BaseResponse<EnquiryDetails>> addEnquiryDetails(@RequestBody EnquiryDetails enquiryDetails)
-	{
-		EnquiryDetails enquiry=loanAppServiceI.addEnquiryDetails(enquiryDetails);
-		return new ResponseEntity<BaseResponse<EnquiryDetails>>
-		(new BaseResponse<EnquiryDetails>(201, "Enquiry Received Successfully", new Date(), enquiry), HttpStatus.CREATED);
-		
+	public ResponseEntity<BaseResponse<EnquiryDetails>> addEnquiryDetails(@RequestBody EnquiryDetails enquiryDetails) {
+		EnquiryDetails enquiry = loanAppServiceI.addEnquiryDetails(enquiryDetails);
+		return new ResponseEntity<BaseResponse<EnquiryDetails>>(
+				new BaseResponse<EnquiryDetails>(201, "Enquiry Received Successfully", new Date(), enquiry),
+				HttpStatus.CREATED);
+
 	}
-	
+
 	@GetMapping("/getusers/{userName}/{userPassword}")
-	public ResponseEntity<BaseResponse<Users>>getusers(@PathVariable String userName,
-			@PathVariable String userPassword )
-	{
-				
-	Users u	=loanAppServiceI.getusers(userName,userPassword);
-			
-		return new ResponseEntity<BaseResponse<Users>>
-		(new BaseResponse<Users>(201, "Enquiry Received Successfully", new Date(), u), HttpStatus.CREATED);
-		
+	public ResponseEntity<BaseResponse<Users>> getusers(@PathVariable String userName,
+			@PathVariable String userPassword) {
+
+		Users u = loanAppServiceI.getusers(userName, userPassword);
+
+		return new ResponseEntity<BaseResponse<Users>>(
+				new BaseResponse<Users>(201, "Enquiry Received Successfully", new Date(), u), HttpStatus.CREATED);
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
