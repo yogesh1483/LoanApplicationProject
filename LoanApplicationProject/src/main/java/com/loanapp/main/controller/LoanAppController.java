@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loanapp.main.entity.Admin;
 import com.loanapp.main.entity.BaseResponse;
+import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
 import com.loanapp.main.exception.UserNotFoundException;
@@ -74,7 +76,13 @@ public class LoanAppController {
 		}
 		return null;
 		
-		
+	}
+	@PostMapping("/addEnquiryDetails")
+	public ResponseEntity<BaseResponse<EnquiryDetails>> addEnquiryDetails(@RequestBody EnquiryDetails enquiryDetails)
+	{
+		EnquiryDetails enquiry=loanAppServiceI.addEnquiryDetails(enquiryDetails);
+		return new ResponseEntity<BaseResponse<EnquiryDetails>>
+		(new BaseResponse<EnquiryDetails>(201, "Enquiry Received Successfully", new Date(), enquiry), HttpStatus.CREATED);
 		
 	}
 	
