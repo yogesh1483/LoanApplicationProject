@@ -23,7 +23,4 @@ public class Users {
 	private String userType;
 	private String name;
 	private byte[] profileImg;
-	
-	
-
 }
