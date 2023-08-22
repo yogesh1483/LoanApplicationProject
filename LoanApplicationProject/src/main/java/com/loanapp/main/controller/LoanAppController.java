@@ -88,6 +88,12 @@ public class LoanAppController {
 
 		
 	}
+	@GetMapping("/getEnquiryByStatus/{status1}/{status2}")
+	public Iterable<EnquiryDetails> getEnquiryOnStatus(@PathVariable ("status1") String status1,@PathVariable ("status2") String status2)
+	{
+		return loanAppServiceI.getEnquiryOnStatus(status1,status2);
+		
+	}
 
 }
  

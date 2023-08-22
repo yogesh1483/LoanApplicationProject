@@ -5,4 +5,8 @@ import com.loanapp.main.entity.EnquiryDetails;
 
 public interface EnquiryDetailsRepo extends JpaRepository<EnquiryDetails, Integer>{
 
+	Iterable<EnquiryDetails> findAllByEnquiryStatus(String status1);
+
+	Iterable<EnquiryDetails> findAllByEnquiryStatusOrEnquiryStatus(String status1, String status2);
+
 }

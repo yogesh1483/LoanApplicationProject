@@ -24,7 +24,7 @@ public class EnquiryDetails {
 	private String email;
 	private long mobileNumber;
 	private String pancardNumber;
-	private String ENQUIRY_STATUS;//CREATED,CIBIL_REQUIRED,CIBIL_OK,CIBIL_REJECT,ACCEPTED
+	private String enquiryStatus;//CREATED,CIBIL_REQUIRED,CIBIL_OK,CIBIL_REJECT,ACCEPTED
 	@OneToOne(cascade=CascadeType.ALL)
 	private Cibil cibil;
 }

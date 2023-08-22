@@ -31,4 +31,6 @@ public interface LoanAppServiceI {
 
 	CustomerVerification addCustomerVerification(CustomerVerification customerVerification);
 
+	Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2);
+
 }

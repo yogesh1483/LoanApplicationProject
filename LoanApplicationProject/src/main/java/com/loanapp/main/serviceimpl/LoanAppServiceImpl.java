@@ -84,7 +84,7 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	@Override
 	public EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails) {
 		  
-		   enquiryDetails.setENQUIRY_STATUS(String.valueOf(EnquiryStatus.CREATED));
+		   enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CREATED));
 		
 		return er.save(enquiryDetails);
 	}
@@ -126,7 +126,18 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		return cvr.save(customerVerification);
 	}
 
+	@Override
+	public Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2) {
+		if(status2.length()<3)
+		{
+		return er.findAllByEnquiryStatus(status1);
+		}
+		else {
+			return er.findAllByEnquiryStatusOrEnquiryStatus(status1,status2);
+		}
+		
 	
 	
 
+}
 }
