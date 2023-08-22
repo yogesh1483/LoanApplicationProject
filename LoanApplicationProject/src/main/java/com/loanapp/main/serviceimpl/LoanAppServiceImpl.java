@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.loanapp.main.consts.EnquiryStatus;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
@@ -70,6 +71,8 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 	@Override
 	public EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails) {
+		  
+		   enquiryDetails.setENQUIRY_STATUS(String.valueOf(EnquiryStatus.CREATED));
 		
 		return er.save(enquiryDetails);
 	}

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loanapp.main.entity.AllPersonalDocuments;
-import com.loanapp.main.entity.CibilStatus;
+//import com.loanapp.main.entity.CibilStatus;
 import com.loanapp.main.entity.Customer;
 import com.loanapp.main.servicei.Customer_Service;
 
@@ -39,7 +39,7 @@ public class Customer_Controller {
 		ObjectMapper om = new ObjectMapper();
 		Customer c = om.readValue(cust, Customer.class);
 
-		c.setApplicationStatus(String.valueOf(CibilStatus.pending));
+		//c.setApplicationStatus(String.valueOf(CibilStatus.pending));
 		c.setAllPersonalDoc(d);
 
 		return new ResponseEntity<Customer>(cs.setCustomer(c), HttpStatus.OK);
