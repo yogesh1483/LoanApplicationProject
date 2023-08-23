@@ -121,18 +121,21 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		return cld.save(currentLoanDetails);
 	}
 
+	
 	//for adding Customer Address details
 	@Override
 	public CustomerAddress addCustomerAddress(CustomerAddress customerAddress) {
 	return car.save(customerAddress);
 	}
 
+	
 	//for adding Customer Verification details
 	@Override
 	public CustomerVerification addCustomerVerification(CustomerVerification customerVerification) {
 		return cvr.save(customerVerification);
 	}
 
+	
 	@Override
 	public Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2) {
 		if(status2.length()<3)
