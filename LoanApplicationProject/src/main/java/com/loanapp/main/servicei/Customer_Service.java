@@ -6,4 +6,6 @@ public interface Customer_Service {
 
 	public Customer setCustomer(Customer c);
 
+	public Iterable<Customer> getCustomerbyStatus(String applicationStatus);
+
 }
