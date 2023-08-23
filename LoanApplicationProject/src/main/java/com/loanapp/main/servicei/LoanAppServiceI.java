@@ -11,7 +11,7 @@ import com.loanapp.main.entity.CustomerVerification;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
-
+import com.loanapp.main.exception.UserNotFoundException;
 
 public interface LoanAppServiceI {
 
