@@ -13,11 +13,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.loanapp.main.consts.EnquiryStatus;
 import com.loanapp.main.entity.ContactUs;
+import com.loanapp.main.entity.CurrentLoanDetails;
+import com.loanapp.main.entity.CustomerAddress;
+import com.loanapp.main.entity.CustomerVerification;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
 import com.loanapp.main.exception.UserNotFoundException;
 import com.loanapp.main.repository.ContactUsRepo;
+import com.loanapp.main.repository.CurrentDetailsRepo;
+import com.loanapp.main.repository.CustomerAddressRepo;
+import com.loanapp.main.repository.CustomerVerificationRepo;
 import com.loanapp.main.repository.EnquiryDetailsRepo;
 import com.loanapp.main.repository.UsersRepo;
 import com.loanapp.main.servicei.LoanAppServiceI;
@@ -35,6 +41,12 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	@Autowired
 	ContactUsRepo cr;
 	@Autowired JavaMailSender sender;
+	@Autowired
+	CurrentDetailsRepo cld;
+	@Autowired
+	CustomerAddressRepo car;
+	@Autowired
+	CustomerVerificationRepo cvr;
 	
 	@Value("$spring.mail.username")
 	private String formMail;
@@ -91,9 +103,27 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	}
 
 	@Override
-	public List<EnquiryDetails> getEnquiry() {
-		
+	public List<EnquiryDetails> getEnquiry() {		
 		return er.findAll();
+	}
+
+	
+	//for adding current loan details
+	@Override
+	public CurrentLoanDetails addCurrentLoanDetails(CurrentLoanDetails currentLoanDetails) {
+		return cld.save(currentLoanDetails);
+	}
+
+	//for adding Customer Address details
+	@Override
+	public CustomerAddress addCustomerAddress(CustomerAddress customerAddress) {
+	return car.save(customerAddress);
+	}
+
+	//for adding Customer Verification details
+	@Override
+	public CustomerVerification addCustomerVerification(CustomerVerification customerVerification) {
+		return cvr.save(customerVerification);
 	}
 
 	
