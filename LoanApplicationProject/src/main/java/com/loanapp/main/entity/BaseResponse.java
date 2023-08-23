@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseResponse<T> {
-	private int responseStatus;
+	private Integer responseStatus;
 	private String responseMsg;
 	private Date responseDate;
 	private T responseData;

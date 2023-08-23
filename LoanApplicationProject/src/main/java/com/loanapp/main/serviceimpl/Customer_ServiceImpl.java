@@ -18,4 +18,9 @@ public class Customer_ServiceImpl implements Customer_Service {
 		return cr.save(c);
 	}
 
+	@Override
+	public Iterable<Customer> getCustomerbyStatus(String applicationStatus) {
+	   return cr.findAllByApplicationStatus(applicationStatus);
+	}
+
 }
