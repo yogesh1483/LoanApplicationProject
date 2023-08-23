@@ -87,8 +87,15 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	public EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails) {
 		  
 		   enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CREATED));
-		
-		return er.save(enquiryDetails);
+		   
+		   SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+			simpleMailMessage.setFrom(formMail);
+			simpleMailMessage.setTo(enquiryDetails.getEmail());
+			simpleMailMessage.setSubject("You have filled Enquiry Form..Thank you!!");
+			simpleMailMessage.setText("Hello "+enquiryDetails.getFirstName()+"\t"+enquiryDetails.getLastName()+"/t And Your Enquiry Status is: "+enquiryDetails.getEnquiryStatus());
+			sender.send(simpleMailMessage);
+			
+			return er.save(enquiryDetails);
 	}
 
 	@Override
