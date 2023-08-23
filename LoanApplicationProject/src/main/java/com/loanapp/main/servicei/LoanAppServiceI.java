@@ -33,4 +33,17 @@ public interface LoanAppServiceI {
 
 	Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2);
 
+	EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails enquiryDetails);
+
+
+
+	
+
+	
+
+
+
+	
+
+
 }

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+
+import org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -142,9 +144,25 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		else {
 			return er.findAllByEnquiryStatusOrEnquiryStatus(status1,status2);
 		}
-		
+	}
+
+	@Override
+	public EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails updatedEnquiryDetails) {
+	    Optional<EnquiryDetails> e = er.findById(eId);
+	    
+	    if (e.isPresent()) {
+	        EnquiryDetails enqStatus = e.get();
+	        enqStatus.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED)); 
+	        
+	        return er.save(enqStatus); 
+	      }
+		    return updatedEnquiryDetails;
+   }
+}
+	
+
+	
 	
 	
 
-}
-}
+

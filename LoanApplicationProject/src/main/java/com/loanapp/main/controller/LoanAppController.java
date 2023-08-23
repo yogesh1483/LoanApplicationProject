@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -92,6 +93,18 @@ public class LoanAppController {
 	public Iterable<EnquiryDetails> getEnquiryOnStatus(@PathVariable ("status1") String status1,@PathVariable ("status2") String status2)
 	{
 		return loanAppServiceI.getEnquiryOnStatus(status1,status2);
+		
+	}
+	
+	@PutMapping("/updateEnquiryStatus/{eId}")
+	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
+			                                                                @PathVariable ("eId") int eId)
+	{       
+		EnquiryDetails enquiryDetail   =  loanAppServiceI.updateEnquiryStatus(eId,enquiryDetails);
+		               
+		return new ResponseEntity<BaseResponse<EnquiryDetails>>(
+				new BaseResponse<EnquiryDetails>(200, "Enquiry Received Successfully", new Date(),  enquiryDetail ),
+				HttpStatus.OK);
 		
 	}
 
