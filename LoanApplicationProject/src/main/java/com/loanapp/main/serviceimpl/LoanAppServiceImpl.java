@@ -35,101 +35,93 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 	@Autowired
 	Random rm;
-	
 	@Autowired
 	UsersRepo ur;
 	@Autowired
 	EnquiryDetailsRepo er;
 	@Autowired
 	ContactUsRepo cr;
-	@Autowired JavaMailSender sender;
+	@Autowired
+	JavaMailSender sender;
 	@Autowired
 	CurrentDetailsRepo cld;
 	@Autowired
 	CustomerAddressRepo car;
 	@Autowired
 	CustomerVerificationRepo cvr;
-	
 	@Value("$spring.mail.username")
 	private String formMail;
-
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
-		if(user.getUserType()!=null) {
-		try {
-			user.setProfileImg(profileImg.getBytes());
-			user.setUserName(user.getName()+""+user.getUserType()+"@"+rm.nextInt(4444));
-			user.setUserPassword(user.getUserType()+"@"+rm.nextInt(1111));
-			
-			SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-			simpleMailMessage.setFrom(formMail);
-			simpleMailMessage.setTo(user.getUserEmail());
-			simpleMailMessage.setSubject("Loan Application Username And Password");
-			simpleMailMessage.setText("Hello"+user.getName()+"\t Your Username: "+user.getUserName()+"/t And Password: "+user.getUserPassword());
-			sender.send(simpleMailMessage);
-			
-
-			
-			return ur.save(user);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}else
-		{
+		if (user.getUserType() != null) {
+			try {
+				user.setProfileImg(profileImg.getBytes());
+				user.setUserName(user.getName() + "" + user.getUserType() + "@" + rm.nextInt(4444));
+				user.setUserPassword(user.getUserType() + "@" + rm.nextInt(1111));
+				SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+				simpleMailMessage.setFrom(formMail);
+				simpleMailMessage.setTo(user.getUserEmail());
+				simpleMailMessage.setSubject("Loan Application Username And Password");
+				simpleMailMessage.setText("Hello" + user.getName() + "\t Your Username: " + user.getUserName()
+						+ "/t And Password: " + user.getUserPassword());
+				sender.send(simpleMailMessage);
+				return ur.save(user);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
 			throw new UserCanNotCreatedException("User Can Not Be Created Provide Valid Information");
 		}
-		
 		return null;
 	}
 
 	@Override
 	public EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails) {
-		  
-		   enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CREATED));
-		   
-		   SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
-			simpleMailMessage.setFrom(formMail);
-			simpleMailMessage.setTo(enquiryDetails.getEmail());
-			simpleMailMessage.setSubject("You have filled Enquiry Form..Thank you!!");
-			simpleMailMessage.setText("Hello "+enquiryDetails.getFirstName()+"\t"+enquiryDetails.getLastName()+"/t And Your Enquiry Status is: "+enquiryDetails.getEnquiryStatus());
-			sender.send(simpleMailMessage);
-			
-			return er.save(enquiryDetails);
-	}
 
+		enquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CREATED));
+
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setFrom(formMail);
+		simpleMailMessage.setTo(enquiryDetails.getEmail());
+		simpleMailMessage.setSubject("You have filled Enquiry Form..Thank you!!");
+		simpleMailMessage.setText("Hello " + enquiryDetails.getFirstName() + "\t" + enquiryDetails.getLastName()
+				+ "/t And Your Enquiry Status is: " + enquiryDetails.getEnquiryStatus());
+		sender.send(simpleMailMessage);
+
+		return er.save(enquiryDetails);
+	}
+	
 	@Override
 	public Users getusers(String userName, String userPassword) {
-		
-		
+
 		return ur.findAllByUserNameAndUserPassword(userName, userPassword);
 	}
 
 	@Override
 	public ContactUs addEnquiryDetails(ContactUs contactUs) {
-		
+
 		return cr.save(contactUs);
 	}
 
 	@Override
-	public List<EnquiryDetails> getEnquiry() {		
+	public List<EnquiryDetails> getEnquiry() {
 		return er.findAll();
 	}
 
-	
-	//for adding current loan details
+	// for adding current loan details
 	@Override
 	public CurrentLoanDetails addCurrentLoanDetails(CurrentLoanDetails currentLoanDetails) {
 		return cld.save(currentLoanDetails);
 	}
 
-	//for adding Customer Address details
+	// for adding Customer Address details
 	@Override
 	public CustomerAddress addCustomerAddress(CustomerAddress customerAddress) {
-	return car.save(customerAddress);
+		return car.save(customerAddress);
 	}
 
-	//for adding Customer Verification details
+	// for adding Customer Verification details
 	@Override
 	public CustomerVerification addCustomerVerification(CustomerVerification customerVerification) {
 		return cvr.save(customerVerification);
@@ -137,32 +129,22 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 	@Override
 	public Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2) {
-		if(status2.length()<3)
-		{
-		return er.findAllByEnquiryStatus(status1);
-		}
-		else {
-			return er.findAllByEnquiryStatusOrEnquiryStatus(status1,status2);
+		if (status2.length() < 3) {
+			return er.findAllByEnquiryStatus(status1);
+		} else {
+			return er.findAllByEnquiryStatusOrEnquiryStatus(status1, status2);
 		}
 	}
 
 	@Override
 	public EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails updatedEnquiryDetails) {
-	    Optional<EnquiryDetails> e = er.findById(eId);
-	    
-	    if (e.isPresent()) {
-	        EnquiryDetails enqStatus = e.get();
-	        enqStatus.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED)); 
-	        
-	        return er.save(enqStatus); 
-	      }
-		    return updatedEnquiryDetails;
-   }
+		Optional<EnquiryDetails> e = er.findById(eId);
+
+		if (e.isPresent()) {
+			EnquiryDetails enqStatus = e.get();
+			enqStatus.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED));
+			return er.save(enqStatus);
+		}
+		return updatedEnquiryDetails;
+	}
 }
-	
-
-	
-	
-	
-
-
