@@ -13,7 +13,7 @@ public class GetCibilScoreController {
 	@GetMapping("/getCibilScore/{pancardNumber}")
 	public int getCibilScore(@PathVariable("pancardNumber") String pancardNumber) {
 		if(pancardNumber.length()==12) {
-		return random.nextInt(600,900);
+		return random.ints(500,(900+1)).findFirst().getAsInt();
 		}
 		else {
 			return 0;
