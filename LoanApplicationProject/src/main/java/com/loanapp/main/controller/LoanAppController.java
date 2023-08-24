@@ -144,13 +144,13 @@ public class LoanAppController {
 				HttpStatus.CREATED);
      }
 
-	@GetMapping("/checkCibil/{pancardNumber}")
-	public Integer checkCibil(@PathVariable("pancardNumber") String pancardNumber){
+	@PostMapping("/checkCibil/{pancardNumber}")
+	public ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber") String pancardNumber, @RequestBody Cibil cibil){
 		String url="http://localhost:8081/getCibilScore/"+pancardNumber;
 		Integer cibilScore= rs.getForObject(url, Integer.class);
-		System.out.println(cibilScore);
-		return cibilScore;
-		
+		Cibil cibilDetails = loanAppServiceI.checkCibil(cibil,cibilScore);
+		return new ResponseEntity<BaseResponse<Cibil>>(
+				new BaseResponse<Cibil>(201, "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED);
      }
 }
  

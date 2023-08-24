@@ -17,7 +17,7 @@ public class Cibil {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int cibilId;
-	private int clbilScore;
+	private int cibilScore;
 	private String clbilScoreDateTime;
 	private String cibilStatus;
 	private String cibilRemark;

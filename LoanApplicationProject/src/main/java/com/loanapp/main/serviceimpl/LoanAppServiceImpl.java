@@ -1,11 +1,13 @@
 package com.loanapp.main.serviceimpl;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-
-import org.hibernate.loader.plan.build.internal.spaces.EntityQuerySpaceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -13,7 +15,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.loanapp.main.consts.CibilRemark;
+import com.loanapp.main.consts.CibilStatus;
 import com.loanapp.main.consts.EnquiryStatus;
+import com.loanapp.main.entity.Cibil;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
@@ -21,7 +26,7 @@ import com.loanapp.main.entity.CustomerVerification;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
-import com.loanapp.main.exception.UserNotFoundException;
+import com.loanapp.main.repository.CibilRepo;
 import com.loanapp.main.repository.ContactUsRepo;
 import com.loanapp.main.repository.CurrentDetailsRepo;
 import com.loanapp.main.repository.CustomerAddressRepo;
@@ -49,6 +54,8 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	CustomerAddressRepo car;
 	@Autowired
 	CustomerVerificationRepo cvr;
+	@Autowired
+	CibilRepo cibilRepo;
 	@Value("$spring.mail.username")
 	private String formMail;
 	@Override
@@ -147,4 +154,24 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		}
 		return updatedEnquiryDetails;
 	}
+
+	@Override
+	public Cibil checkCibil(Cibil cibil, Integer cibilScore) {
+		cibil.setCibilScore(cibilScore);
+		  Date date = Calendar.getInstance().getTime();  
+          DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+          String strDate = dateFormat.format(date);  
+          cibil.setClbilScoreDateTime(strDate);
+          cibil.setCibilStatus(String.valueOf(CibilStatus.PENDING));
+          if(cibilScore>700){
+        	  cibil.setCibilRemark(String.valueOf(CibilRemark.ELIGIBLE_FOR_LOAN));
+        	  return cibilRepo.save(cibil);
+          }
+          else{
+        	  cibil.setCibilRemark(String.valueOf(CibilRemark.NOT_ELIGIBLE_FOR_LOAN));
+        	  return cibilRepo.save(cibil);
+          }
+		
+	}
+	
 }

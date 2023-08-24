@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.loanapp.main.entity.Cibil;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
@@ -15,7 +16,7 @@ import com.loanapp.main.exception.UserNotFoundException;
 
 public interface LoanAppServiceI {
 
-	Users saveUser(Users user, MultipartFile profileImg)throws UserCanNotCreatedException;
+	Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException;
 
 	EnquiryDetails addEnquiryDetails(EnquiryDetails enquiryDetails);
 
@@ -23,9 +24,9 @@ public interface LoanAppServiceI {
 
 	ContactUs addEnquiryDetails(ContactUs contactUs);
 
-    List<EnquiryDetails> getEnquiry();
+	List<EnquiryDetails> getEnquiry();
 
-    CurrentLoanDetails addCurrentLoanDetails(CurrentLoanDetails currentLoanDetails);
+	CurrentLoanDetails addCurrentLoanDetails(CurrentLoanDetails currentLoanDetails);
 
 	CustomerAddress addCustomerAddress(CustomerAddress customerAddress);
 
@@ -35,15 +36,6 @@ public interface LoanAppServiceI {
 
 	EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails enquiryDetails);
 
-
-
-	
-
-	
-
-
-
-	
-
+	Cibil checkCibil(Cibil cibil, Integer cibilScore);
 
 }
