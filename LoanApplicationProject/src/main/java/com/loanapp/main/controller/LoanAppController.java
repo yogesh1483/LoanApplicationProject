@@ -145,11 +145,11 @@ public class LoanAppController {
      }
 
 	@GetMapping("/checkCibil/{pancardNumber}")
-	public ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber") String pancardNumber){
+	public Integer checkCibil(@PathVariable("pancardNumber") String pancardNumber){
 		String url="http://localhost:8081/getCibilScore/"+pancardNumber;
-		Cibil cibilScore = rs.getForObject(url, Cibil.class);
+		Integer cibilScore= rs.getForObject(url, Integer.class);
 		System.out.println(cibilScore);
-		return null;
+		return cibilScore;
 		
      }
 }
