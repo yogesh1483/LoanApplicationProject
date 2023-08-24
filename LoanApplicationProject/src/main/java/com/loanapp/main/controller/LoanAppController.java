@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loanapp.main.entity.BaseResponse;
+import com.loanapp.main.entity.Cibil;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
@@ -36,6 +38,9 @@ public class LoanAppController {
 
 	@Autowired
 	LoanAppServiceI loanAppServiceI;
+	
+	@Autowired
+	RestTemplate rs;
 
 	@PostMapping("/addUser")
 	public ResponseEntity<BaseResponse<Users>> addUser(@RequestPart("user") String userJson,
@@ -139,5 +144,13 @@ public class LoanAppController {
 				HttpStatus.CREATED);
      }
 
+	@GetMapping("/checkCibil/{pancardNumber}")
+	public ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber") String pancardNumber){
+		String url="http://localhost:8081/getCibilScore/"+pancardNumber;
+		Cibil cibilScore = rs.getForObject(url, Cibil.class);
+		System.out.println(cibilScore);
+		return null;
+		
+     }
 }
  

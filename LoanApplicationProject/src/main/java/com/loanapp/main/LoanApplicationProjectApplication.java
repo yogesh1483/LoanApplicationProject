@@ -5,6 +5,7 @@ import java.util.Random;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class LoanApplicationProjectApplication {
@@ -18,5 +19,11 @@ public class LoanApplicationProjectApplication {
 		Random rn=new Random();
 		return rn;
 		
+	}
+	
+	@Bean
+	public RestTemplate rs(){
+		RestTemplate rt = new RestTemplate();
+		return rt;
 	}
 }
