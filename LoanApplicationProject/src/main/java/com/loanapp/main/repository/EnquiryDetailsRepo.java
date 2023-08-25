@@ -11,6 +11,8 @@ public interface EnquiryDetailsRepo extends JpaRepository<EnquiryDetails, Intege
 
 	Iterable<EnquiryDetails> findAllByEnquiryStatusOrEnquiryStatus(String status1, String status2);
 
+	EnquiryDetails findByEid(int eid);
+
 	
 
 }

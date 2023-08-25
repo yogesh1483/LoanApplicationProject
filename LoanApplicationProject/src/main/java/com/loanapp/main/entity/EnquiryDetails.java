@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class EnquiryDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int eId;
+	private int eid;
 	private String firstName;
 	private String lastName;
 	private int age;
@@ -26,5 +26,5 @@ public class EnquiryDetails {
 	private String pancardNumber;
 	private String enquiryStatus;//CREATED,CIBIL_REQUIRED,CIBIL_OK,CIBIL_REJECT,ACCEPTED
 	@OneToOne(cascade=CascadeType.ALL)
-	private Cibil cibil;
+	private Cibil cibil=new Cibil();;
 }

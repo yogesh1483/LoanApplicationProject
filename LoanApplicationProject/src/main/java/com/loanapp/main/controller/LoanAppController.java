@@ -40,7 +40,7 @@ public class LoanAppController {
 
 	@Autowired
 	LoanAppServiceI loanAppServiceI;
-	
+
 	@Autowired
 	RestTemplate rs;
 
@@ -79,93 +79,100 @@ public class LoanAppController {
 				new BaseResponse<Users>(201, "Enquiry Received Successfully", new Date(), u), HttpStatus.CREATED);
 
 	}
-	
-	
+
 	@PostMapping("/addContactInfo")
-	public ResponseEntity<BaseResponse<ContactUs>> addContactInfo(@RequestBody ContactUs contactUs){
-	  ContactUs add = loanAppServiceI.addEnquiryDetails(contactUs);
+	public ResponseEntity<BaseResponse<ContactUs>> addContactInfo(@RequestBody ContactUs contactUs) {
+		ContactUs add = loanAppServiceI.addEnquiryDetails(contactUs);
 		return new ResponseEntity<BaseResponse<ContactUs>>(
 				new BaseResponse<ContactUs>(201, "Contact save Successfully", new Date(), contactUs),
 				HttpStatus.CREATED);
-     }
-	
-	
+	}
+
 	@GetMapping("/getEnquiry")
-	public ResponseEntity<BaseResponse<List<EnquiryDetails>>> viewEnquiry(){   
+	public ResponseEntity<BaseResponse<List<EnquiryDetails>>> viewEnquiry() {
 		List<EnquiryDetails> list = loanAppServiceI.getEnquiry();
 		return new ResponseEntity<BaseResponse<List<EnquiryDetails>>>(
-				new BaseResponse<List<EnquiryDetails>>(201, "Enquiry Received Successfully", new Date(), list), HttpStatus.CREATED);	
+				new BaseResponse<List<EnquiryDetails>>(201, "Enquiry Received Successfully", new Date(), list),
+				HttpStatus.CREATED);
 	}
-	
-	
+
 	@GetMapping("/getEnquiryByStatus/{status1}/{status2}")
-	public Iterable<EnquiryDetails> getEnquiryOnStatus(@PathVariable ("status1") String status1,@PathVariable ("status2") String status2){
-		return loanAppServiceI.getEnquiryOnStatus(status1,status2);	
+	public Iterable<EnquiryDetails> getEnquiryOnStatus(@PathVariable("status1") String status1,
+			@PathVariable("status2") String status2) {
+		return loanAppServiceI.getEnquiryOnStatus(status1, status2);
 	}
-	
-	@PutMapping("/updateEnquiryStatus/{eId}")
-	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
-			@PathVariable ("eId") int eId)
-	{
-		String url="http://localhost:8081/getCibilScore/"+enquiryDetails.getPancardNumber();
-		Integer cibilScore= rs.getForObject(url, Integer.class);
-		System.out.println(cibilScore);
-		EnquiryDetails enquiryDetail   =  loanAppServiceI.updateEnquiryStatus(eId,cibilScore,enquiryDetails);
-		               
-		return new ResponseEntity<BaseResponse<EnquiryDetails>>(
-				new BaseResponse<EnquiryDetails>(200, "Enquiry Received Successfully", new Date(),  enquiryDetail ),
+
+	@PutMapping("/getcibil")
+	public ResponseEntity<BaseResponse<Integer>> getcibil(@RequestBody EnquiryDetails e) {
+		e.setCibil(new Cibil());
+		String url = "http://localhost:8081/getCibilScore/" + e.getPancardNumber();
+		int cibil = rs.getForObject(url, Integer.class);
+		e.getCibil().setCibilScore(cibil);
+		EnquiryDetails e2 = loanAppServiceI.updateEnquiryStatus(e.getEid(), e);
+
+		return new ResponseEntity<BaseResponse<Integer>>(
+				new BaseResponse<Integer>(200, "CIBIL FOUND", new Date(), e2.getCibil().getCibilScore()),
 				HttpStatus.OK);
-		
 	}
 
+	@PutMapping("/updateEnquiryStatus/{eid}")
+	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
+			@PathVariable("eid") int eid) {
 
-	
-	//for adding current loan details
+		EnquiryDetails enquiryDetail = loanAppServiceI.updateEnquiryStatus(eid, enquiryDetails);
+
+		return new ResponseEntity<BaseResponse<EnquiryDetails>>(
+				new BaseResponse<EnquiryDetails>(200, "Enquiry Received Successfully", new Date(), enquiryDetail),
+				HttpStatus.OK);
+
+	}
+
+	// for adding current loan details
 	@PostMapping("/addCurrentLoanDetails")
-	public ResponseEntity<BaseResponse<CurrentLoanDetails>> addCurrentLoanDetails(@RequestBody CurrentLoanDetails currentLoanDetails){
+	public ResponseEntity<BaseResponse<CurrentLoanDetails>> addCurrentLoanDetails(
+			@RequestBody CurrentLoanDetails currentLoanDetails) {
 		CurrentLoanDetails add = loanAppServiceI.addCurrentLoanDetails(currentLoanDetails);
 		return new ResponseEntity<BaseResponse<CurrentLoanDetails>>(
 				new BaseResponse<CurrentLoanDetails>(201, "Contact save Successfully", new Date(), currentLoanDetails),
 				HttpStatus.CREATED);
-     }
-	
-	//for adding Customer Address details
+	}
+
+	// for adding Customer Address details
 	@PostMapping("/addCustomerAddress")
-	public ResponseEntity<BaseResponse<CustomerAddress>> addCurrentLoanDetails(@RequestBody CustomerAddress customerAddress){
+	public ResponseEntity<BaseResponse<CustomerAddress>> addCurrentLoanDetails(
+			@RequestBody CustomerAddress customerAddress) {
 		CustomerAddress add = loanAppServiceI.addCustomerAddress(customerAddress);
 		return new ResponseEntity<BaseResponse<CustomerAddress>>(
 				new BaseResponse<CustomerAddress>(201, "Contact save Successfully", new Date(), customerAddress),
 				HttpStatus.CREATED);
-     }
-	         
-	 
-	//for adding Customer Verification details
-	@PostMapping("/addCustomerVerification")
-	public ResponseEntity<BaseResponse<CustomerVerification>> addCustomerVerification(@RequestBody CustomerVerification customerVerification){
-		CustomerVerification add = loanAppServiceI.addCustomerVerification(customerVerification);
-		return new ResponseEntity<BaseResponse<CustomerVerification>>(
-				new BaseResponse<CustomerVerification>(201, "Contact save Successfully", new Date(), customerVerification),
-				HttpStatus.CREATED);
-     }
+	}
 
-		/*
-		 * @PostMapping("/checkCibil/{pancardNumber}") public
-		 * ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber")
-		 * String pancardNumber, @RequestBody Cibil cibil){ String
-		 * url="http://localhost:8081/getCibilScore/"+pancardNumber; Integer cibilScore=
-		 * rs.getForObject(url, Integer.class); Cibil cibilDetails =
-		 * loanAppServiceI.checkCibil(cibil,cibilScore); return new
-		 * ResponseEntity<BaseResponse<Cibil>>( new BaseResponse<Cibil>(201,
-		 * "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED); }
-		 */
-	
+	// for adding Customer Verification details
+	@PostMapping("/addCustomerVerification")
+	public ResponseEntity<BaseResponse<CustomerVerification>> addCustomerVerification(
+			@RequestBody CustomerVerification customerVerification) {
+		CustomerVerification add = loanAppServiceI.addCustomerVerification(customerVerification);
+		return new ResponseEntity<BaseResponse<CustomerVerification>>(new BaseResponse<CustomerVerification>(201,
+				"Contact save Successfully", new Date(), customerVerification), HttpStatus.CREATED);
+	}
+
+	/*
+	 * @PostMapping("/checkCibil/{pancardNumber}") public
+	 * ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber")
+	 * String pancardNumber, @RequestBody Cibil cibil){ String
+	 * url="http://localhost:8081/getCibilScore/"+pancardNumber; Integer cibilScore=
+	 * rs.getForObject(url, Integer.class); Cibil cibilDetails =
+	 * loanAppServiceI.checkCibil(cibil,cibilScore); return new
+	 * ResponseEntity<BaseResponse<Cibil>>( new BaseResponse<Cibil>(201,
+	 * "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED); }
+	 */
+
 	@PostMapping("/sendMail")
-	public ResponseEntity<BaseResponse<EmailSender>> sendMail(@RequestBody EmailSender emailSender,@RequestBody Users user){
-		EmailSender mail = loanAppServiceI.sendMail(emailSender,user);
+	public ResponseEntity<BaseResponse<EmailSender>> sendMail(@RequestBody EmailSender emailSender) {
+		EmailSender mail = loanAppServiceI.sendMail(emailSender);
 		return new ResponseEntity<BaseResponse<EmailSender>>(
 				new BaseResponse<EmailSender>(201, "Mail Send Successfully", new Date(), emailSender),
 				HttpStatus.CREATED);
-     }
-	
+	}
+
 }
- 

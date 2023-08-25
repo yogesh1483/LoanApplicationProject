@@ -2,6 +2,7 @@ package com.loanapp.main.serviceimpl;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.loanapp.main.consts.CibilStatus;
 import com.loanapp.main.consts.EnquiryStatus;
+import com.loanapp.main.entity.Cibil;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
@@ -53,6 +55,7 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	CibilRepo cibilRepo;
 	@Value("$spring.mail.username")
 	private String formMail;
+
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
 		if (user.getUserType() != null) {
@@ -92,7 +95,7 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		sender.send(simpleMailMessage);
 		return er.save(enquiryDetails);
 	}
-	
+
 	@Override
 	public Users getusers(String userName, String userPassword) {
 
@@ -138,50 +141,101 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	}
 
 	@Override
-	public EnquiryDetails updateEnquiryStatus(int eId, int cibilScore, EnquiryDetails updatedEnquiryDetails) {
-		Optional<EnquiryDetails> e =er.findById(eId);
-		if(e.isPresent())
-		{
-		updatedEnquiryDetails.getCibil().setCibilScore(cibilScore);
-		String date = LocalDateTime.now().toString();
-		updatedEnquiryDetails.getCibil().setCibilScoreDateTime(date);
-		String enquiryStatus = updatedEnquiryDetails.getEnquiryStatus();
+	public EnquiryDetails updateEnquiryStatus(int eid, EnquiryDetails updatedEnquiryDetails) {
+		EnquiryDetails e = er.findByEid(eid);
+		if (e.getCibil() == null) {
+			e.setCibil(new Cibil());
+		}
+
+		String enquiryStatus = e.getEnquiryStatus();
 		if (enquiryStatus.equals("CREATED")) {
-			updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED));
-			updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
-			return er.save(updatedEnquiryDetails);
-		}
-		else if(enquiryStatus.equals("CIBIL_REQUIRED")) {
-			updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_CHECKED));
-			updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
-			return er.save(updatedEnquiryDetails);
-		}
-		else if(enquiryStatus.equals("CIBIL_CHECKED")) {
-			if(cibilScore>650) {
-				updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_ARROVED));
-				updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
-				return er.save(updatedEnquiryDetails);
+
+			e.setEnquiryStatus(EnquiryStatus.CIBIL_REQUIRED.toString());
+
+			er.save(e);
+			return e;
+		} else if (enquiryStatus.equals("CIBIL_REQUIRED")) {
+
+			e.setEnquiryStatus(EnquiryStatus.CIBIL_CHECKED.toString());
+			e.getCibil().setCibilScore(updatedEnquiryDetails.getCibil().getCibilScore());
+			if (e.getCibil().getCibilScore() < 650) {
+				e.getCibil().setCibilRemark("cibil score is low");
+				e.getCibil().setCibilStatus(CibilStatus.LOW_CIBIL.toString());
+				e.getCibil().setCibilScoreDateTime(new Date().toString());
+				er.save(e);
+				return e;
+			} else if (e.getCibil().getCibilScore() < 750 && e.getCibil().getCibilScore() > 650) {
+				e.getCibil().setCibilRemark("cibil score is good");
+				e.getCibil().setCibilStatus(CibilStatus.GOOD_CIBIL.toString());
+				e.getCibil().setCibilScoreDateTime(new Date().toString());
+				er.save(e);
+				return e;
+			} else if (e.getCibil().getCibilScore() > 750 && e.getCibil().getCibilScore() < 900) {
+				e.getCibil().setCibilRemark("cibil score is high");
+				e.getCibil().setCibilStatus(CibilStatus.HIGH_CIBIL.toString());
+				e.getCibil().setCibilScoreDateTime(new Date().toString());
+				er.save(e);
+				return e;
+			} else {
+				// throw CibilCoreNotApplicabelException
+
 			}
-			else {
-				updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REJECT));
-				updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
-				return er.save(updatedEnquiryDetails);
+
+		}
+
+		/*
+		 * updatedEnquiryDetails.getCibil().setCibilScore(cibilScore); String date =
+		 * LocalDateTime.now().toString();
+		 * updatedEnquiryDetails.getCibil().setCibilScoreDateTime(date); String
+		 * enquiryStatus = updatedEnquiryDetails.getEnquiryStatus(); if
+		 * (enquiryStatus.equals("CREATED")) {
+		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
+		 * CIBIL_REQUIRED));
+		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
+		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else
+		 * if(enquiryStatus.equals("CIBIL_REQUIRED")) {
+		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
+		 * CIBIL_CHECKED));
+		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
+		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else
+		 * if(enquiryStatus.equals("CIBIL_CHECKED")) { if(cibilScore>650) {
+		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
+		 * CIBIL_ARROVED));
+		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
+		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else {
+		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
+		 * CIBIL_REJECT));
+		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
+		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } }
+		 */
+
+		if (enquiryStatus.equals("CIBIL_CHECKED")) {
+			if (e.getCibil().getCibilScore() > 650) {
+				e.setEnquiryStatus(EnquiryStatus.APPROVED.toString());
+				er.save(e);
+				return e;
+			} else {
+				e.setEnquiryStatus(EnquiryStatus.REJECTED.toString());
+				er.save(e);
+				return e;
 			}
+
 		}
-		}
-		return  null;
+
+		return null;
+
 	}
-	
+
 	@Override
-	public EmailSender sendMail(EmailSender emailSender, Users user) {
+	public EmailSender sendMail(EmailSender emailSender) {
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setFrom(formMail);
 		simpleMailMessage.setTo(emailSender.getMailTo());
-		simpleMailMessage.setSubject("You have filled Enquiry Form..Thank you!!");
-		simpleMailMessage.setText("Hello "); 
-		sender.send(simpleMailMessage); 
+		simpleMailMessage.setSubject(emailSender.getMailSubject());
+		simpleMailMessage.setText(emailSender.getMailText());
+		sender.send(simpleMailMessage);
 
 		return null;
 	}
-	
+
 }
