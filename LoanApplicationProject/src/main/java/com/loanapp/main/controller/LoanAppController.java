@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
 import com.loanapp.main.entity.CustomerVerification;
+import com.loanapp.main.entity.EmailSender;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
@@ -101,12 +103,14 @@ public class LoanAppController {
 		return loanAppServiceI.getEnquiryOnStatus(status1,status2);	
 	}
 	
-
 	@PutMapping("/updateEnquiryStatus/{eId}")
 	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
-			                                                                @PathVariable ("eId") int eId)
-	{       
-		EnquiryDetails enquiryDetail   =  loanAppServiceI.updateEnquiryStatus(eId,enquiryDetails);
+			@PathVariable ("eId") int eId)
+	{
+		String url="http://localhost:8081/getCibilScore/"+enquiryDetails.getPancardNumber();
+		Integer cibilScore= rs.getForObject(url, Integer.class);
+		System.out.println(cibilScore);
+		EnquiryDetails enquiryDetail   =  loanAppServiceI.updateEnquiryStatus(eId,cibilScore,enquiryDetails);
 		               
 		return new ResponseEntity<BaseResponse<EnquiryDetails>>(
 				new BaseResponse<EnquiryDetails>(200, "Enquiry Received Successfully", new Date(),  enquiryDetail ),
@@ -144,13 +148,24 @@ public class LoanAppController {
 				HttpStatus.CREATED);
      }
 
-	@PostMapping("/checkCibil/{pancardNumber}")
-	public ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber") String pancardNumber, @RequestBody Cibil cibil){
-		String url="http://localhost:8081/getCibilScore/"+pancardNumber;
-		Integer cibilScore= rs.getForObject(url, Integer.class);
-		Cibil cibilDetails = loanAppServiceI.checkCibil(cibil,cibilScore);
-		return new ResponseEntity<BaseResponse<Cibil>>(
-				new BaseResponse<Cibil>(201, "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED);
+		/*
+		 * @PostMapping("/checkCibil/{pancardNumber}") public
+		 * ResponseEntity<BaseResponse<Cibil>> checkCibil(@PathVariable("pancardNumber")
+		 * String pancardNumber, @RequestBody Cibil cibil){ String
+		 * url="http://localhost:8081/getCibilScore/"+pancardNumber; Integer cibilScore=
+		 * rs.getForObject(url, Integer.class); Cibil cibilDetails =
+		 * loanAppServiceI.checkCibil(cibil,cibilScore); return new
+		 * ResponseEntity<BaseResponse<Cibil>>( new BaseResponse<Cibil>(201,
+		 * "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED); }
+		 */
+	
+	@PostMapping("/sendMail")
+	public ResponseEntity<BaseResponse<EmailSender>> sendMail(@RequestBody EmailSender emailSender,@RequestBody Users user){
+		EmailSender mail = loanAppServiceI.sendMail(emailSender,user);
+		return new ResponseEntity<BaseResponse<EmailSender>>(
+				new BaseResponse<EmailSender>(201, "Mail Send Successfully", new Date(), emailSender),
+				HttpStatus.CREATED);
      }
+	
 }
  

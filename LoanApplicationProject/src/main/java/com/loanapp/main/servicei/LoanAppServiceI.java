@@ -2,6 +2,7 @@ package com.loanapp.main.servicei;
 
 import java.util.List;
 
+import org.springframework.mail.MailSender;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loanapp.main.entity.Cibil;
@@ -9,6 +10,7 @@ import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
 import com.loanapp.main.entity.CustomerVerification;
+import com.loanapp.main.entity.EmailSender;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
@@ -34,8 +36,10 @@ public interface LoanAppServiceI {
 
 	Iterable<EnquiryDetails> getEnquiryOnStatus(String status1, String status2);
 
-	EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails enquiryDetails);
+	EnquiryDetails updateEnquiryStatus(int eId, int cibilScore, EnquiryDetails enquiryDetails);
 
-	Cibil checkCibil(Cibil cibil, Integer cibilScore);
+	EmailSender sendMail(EmailSender emailSender, Users user);
+
+	
 
 }

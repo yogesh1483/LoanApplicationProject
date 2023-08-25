@@ -1,5 +1,5 @@
 package com.loanapp.main.consts;
 
 public enum CibilStatus {
-	PENDING,APPROVED,REJECTED
+	LOW_CIBIL,GOOD_CIBIL,NEGETIVE_CUSTOMER,FRESH_CIBIL
 }

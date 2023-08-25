@@ -1,10 +1,7 @@
 package com.loanapp.main.serviceimpl;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -14,15 +11,13 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.loanapp.main.consts.CibilRemark;
 import com.loanapp.main.consts.CibilStatus;
 import com.loanapp.main.consts.EnquiryStatus;
-import com.loanapp.main.entity.Cibil;
 import com.loanapp.main.entity.ContactUs;
 import com.loanapp.main.entity.CurrentLoanDetails;
 import com.loanapp.main.entity.CustomerAddress;
 import com.loanapp.main.entity.CustomerVerification;
+import com.loanapp.main.entity.EmailSender;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.exception.UserCanNotCreatedException;
@@ -95,7 +90,6 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 		simpleMailMessage.setText("Hello " + enquiryDetails.getFirstName() + "\t" + enquiryDetails.getLastName()
 				+ "/t And Your Enquiry Status is: " + enquiryDetails.getEnquiryStatus());
 		sender.send(simpleMailMessage);
-
 		return er.save(enquiryDetails);
 	}
 	
@@ -144,34 +138,50 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	}
 
 	@Override
-	public EnquiryDetails updateEnquiryStatus(int eId, EnquiryDetails updatedEnquiryDetails) {
-		Optional<EnquiryDetails> e = er.findById(eId);
-
-		if (e.isPresent()) {
-			EnquiryDetails enqStatus = e.get();
-			enqStatus.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED));
-			return er.save(enqStatus);
+	public EnquiryDetails updateEnquiryStatus(int eId, int cibilScore, EnquiryDetails updatedEnquiryDetails) {
+		Optional<EnquiryDetails> e =er.findById(eId);
+		if(e.isPresent())
+		{
+		updatedEnquiryDetails.getCibil().setCibilScore(cibilScore);
+		String date = LocalDateTime.now().toString();
+		updatedEnquiryDetails.getCibil().setCibilScoreDateTime(date);
+		String enquiryStatus = updatedEnquiryDetails.getEnquiryStatus();
+		if (enquiryStatus.equals("CREATED")) {
+			updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REQUIRED));
+			updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
+			return er.save(updatedEnquiryDetails);
 		}
-		return updatedEnquiryDetails;
+		else if(enquiryStatus.equals("CIBIL_REQUIRED")) {
+			updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_CHECKED));
+			updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
+			return er.save(updatedEnquiryDetails);
+		}
+		else if(enquiryStatus.equals("CIBIL_CHECKED")) {
+			if(cibilScore>650) {
+				updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_ARROVED));
+				updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
+				return er.save(updatedEnquiryDetails);
+			}
+			else {
+				updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.CIBIL_REJECT));
+				updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.GOOD_CIBIL));
+				return er.save(updatedEnquiryDetails);
+			}
+		}
+		}
+		return  null;
 	}
-
+	
 	@Override
-	public Cibil checkCibil(Cibil cibil, Integer cibilScore) {
-		cibil.setCibilScore(cibilScore);
-		  Date date = Calendar.getInstance().getTime();  
-          DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
-          String strDate = dateFormat.format(date);  
-          cibil.setClbilScoreDateTime(strDate);
-          cibil.setCibilStatus(String.valueOf(CibilStatus.PENDING));
-          if(cibilScore>700){
-        	  cibil.setCibilRemark(String.valueOf(CibilRemark.ELIGIBLE_FOR_LOAN));
-        	  return cibilRepo.save(cibil);
-          }
-          else{
-        	  cibil.setCibilRemark(String.valueOf(CibilRemark.NOT_ELIGIBLE_FOR_LOAN));
-        	  return cibilRepo.save(cibil);
-          }
-		
+	public EmailSender sendMail(EmailSender emailSender, Users user) {
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setFrom(formMail);
+		simpleMailMessage.setTo(emailSender.getMailTo());
+		simpleMailMessage.setSubject("You have filled Enquiry Form..Thank you!!");
+		simpleMailMessage.setText("Hello "); 
+		sender.send(simpleMailMessage); 
+
+		return null;
 	}
 	
 }
