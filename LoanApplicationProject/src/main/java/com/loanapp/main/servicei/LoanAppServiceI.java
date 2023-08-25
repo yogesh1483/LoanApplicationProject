@@ -40,6 +40,8 @@ public interface LoanAppServiceI {
 
 	EmailSender sendMail(EmailSender emailSender, Users user);
 
+	List<Users> getAllUsers();
+
 	
 
 }

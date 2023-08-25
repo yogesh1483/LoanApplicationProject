@@ -183,5 +183,11 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 		return null;
 	}
+
+	@Override
+	public List<Users> getAllUsers() {
+		
+		return ur.findAll();
+	}
 	
 }

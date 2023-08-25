@@ -166,6 +166,14 @@ public class LoanAppController {
 				new BaseResponse<EmailSender>(201, "Mail Send Successfully", new Date(), emailSender),
 				HttpStatus.CREATED);
      }
+	@GetMapping("/getAllUsers")
+	public ResponseEntity<BaseResponse<List<Users>>> getAllUsers() {
+		List<Users> list = loanAppServiceI.getAllUsers();
+		return new ResponseEntity<BaseResponse<List<Users>>>(
+				new BaseResponse<List<Users>>(201, "Enquiry Received Successfully", new Date(), list), HttpStatus.CREATED);	
+	}
+		
+	}
 	
-}
+
  
