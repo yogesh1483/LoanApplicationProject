@@ -43,6 +43,8 @@ public interface LoanAppServiceI {
 
 
 
+	List<Users> getAllUsers();
+
 	
 
 }

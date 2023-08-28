@@ -115,7 +115,6 @@ public class LoanAppController {
 				HttpStatus.OK);
 	}
 
-	
 	@PutMapping("/updateEnquiryStatus/{eid}")
 	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
 			@PathVariable("eid") int eid) {
@@ -167,8 +166,6 @@ public class LoanAppController {
 	 * ResponseEntity<BaseResponse<Cibil>>( new BaseResponse<Cibil>(201,
 	 * "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED); }
 	 */
-	
-	
 
 	@PostMapping("/sendMail")
 	public ResponseEntity<BaseResponse<EmailSender>> sendMail(@RequestBody EmailSender emailSender) {
@@ -178,4 +175,11 @@ public class LoanAppController {
 				HttpStatus.CREATED);
 	}
 
+	@GetMapping("/getAllUsers")
+	public ResponseEntity<BaseResponse<List<Users>>> getAllUsers() {
+		List<Users> list = loanAppServiceI.getAllUsers();
+		return new ResponseEntity<BaseResponse<List<Users>>>(
+				new BaseResponse<List<Users>>(201, "Enquiry Received Successfully", new Date(), list),
+				HttpStatus.CREATED);
+	}
 }
