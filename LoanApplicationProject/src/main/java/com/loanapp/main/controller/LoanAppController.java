@@ -115,6 +115,7 @@ public class LoanAppController {
 				HttpStatus.OK);
 	}
 
+	
 	@PutMapping("/updateEnquiryStatus/{eid}")
 	public ResponseEntity<BaseResponse<EnquiryDetails>> updateEnquiryStatus(@RequestBody EnquiryDetails enquiryDetails,
 			@PathVariable("eid") int eid) {
