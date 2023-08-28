@@ -55,6 +55,7 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 	CibilRepo cibilRepo;
 	@Value("$spring.mail.username")
 	private String formMail;
+	
 
 	@Override
 	public Users saveUser(Users user, MultipartFile profileImg) throws UserCanNotCreatedException {
@@ -183,39 +184,33 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 
 		}
 
-		/*
-		 * updatedEnquiryDetails.getCibil().setCibilScore(cibilScore); String date =
-		 * LocalDateTime.now().toString();
-		 * updatedEnquiryDetails.getCibil().setCibilScoreDateTime(date); String
-		 * enquiryStatus = updatedEnquiryDetails.getEnquiryStatus(); if
-		 * (enquiryStatus.equals("CREATED")) {
-		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
-		 * CIBIL_REQUIRED));
-		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
-		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else
-		 * if(enquiryStatus.equals("CIBIL_REQUIRED")) {
-		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
-		 * CIBIL_CHECKED));
-		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
-		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else
-		 * if(enquiryStatus.equals("CIBIL_CHECKED")) { if(cibilScore>650) {
-		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
-		 * CIBIL_ARROVED));
-		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
-		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } else {
-		 * updatedEnquiryDetails.setEnquiryStatus(String.valueOf(EnquiryStatus.
-		 * CIBIL_REJECT));
-		 * updatedEnquiryDetails.getCibil().setCibilStatus(String.valueOf(CibilStatus.
-		 * GOOD_CIBIL)); return er.save(updatedEnquiryDetails); } }
-		 */
-
 		if (enquiryStatus.equals("CIBIL_CHECKED")) {
 			if (e.getCibil().getCibilScore() > 650) {
 				e.setEnquiryStatus(EnquiryStatus.APPROVED.toString());
+				SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+				simpleMailMessage.setFrom(formMail);
+				simpleMailMessage.setTo(updatedEnquiryDetails.getEmail());
+				simpleMailMessage.setSubject("Your Loan Application Process Has Been Approved!!");
+				simpleMailMessage.setText("Hello " + updatedEnquiryDetails.getFirstName() + " " + updatedEnquiryDetails.getLastName()
+						+ "Your Loan Enquiry Has Been Reviewed And Your Cibli Score is: "+updatedEnquiryDetails.getCibil().getCibilScore()
+						+"Which is upto Mark and You Are eligible for further Loan Process. Click the "
+						+ "Below link to fill the Loan Application Form"
+						+ "");
+				sender.send(simpleMailMessage);
+			
 				er.save(e);
 				return e;
 			} else {
 				e.setEnquiryStatus(EnquiryStatus.REJECTED.toString());
+				SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+				simpleMailMessage.setFrom(formMail);
+				simpleMailMessage.setTo(updatedEnquiryDetails.getEmail());
+				simpleMailMessage.setSubject("Your Loan Application Process Has Been Rejected!!");
+				simpleMailMessage.setText("Hello " + updatedEnquiryDetails.getFirstName() + " " + updatedEnquiryDetails.getLastName()
+						+ "Your Loan Enquiry Has Been Reviewed And Your Cibli Score is: "+updatedEnquiryDetails.getCibil().getCibilScore()
+						+"Which is low and You Are not eligible for further Loan Process.");
+				sender.send(simpleMailMessage);
+			
 				er.save(e);
 				return e;
 			}
