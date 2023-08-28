@@ -167,6 +167,8 @@ public class LoanAppController {
 	 * ResponseEntity<BaseResponse<Cibil>>( new BaseResponse<Cibil>(201,
 	 * "Cibil Score Details", new Date(), cibilDetails), HttpStatus.CREATED); }
 	 */
+	
+	
 
 	@PostMapping("/sendMail")
 	public ResponseEntity<BaseResponse<EmailSender>> sendMail(@RequestBody EmailSender emailSender) {
