@@ -9,4 +9,6 @@ public interface CustomerServiceI {
 	Customer setCustomer(Customer customer, MultipartFile addressProof, MultipartFile panCard, MultipartFile addharCard,
 			MultipartFile photo, MultipartFile signature, MultipartFile salarySlips);
 
+	Iterable<Customer> getCustomerByStatus(String status1, String status2);
+
 }

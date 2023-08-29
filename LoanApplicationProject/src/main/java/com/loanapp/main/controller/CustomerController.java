@@ -5,6 +5,8 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loanapp.main.entity.BaseResponse;
 import com.loanapp.main.entity.Customer;
+import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.entity.Users;
 import com.loanapp.main.servicei.CustomerServiceI;
 
@@ -43,6 +46,12 @@ public class CustomerController {
 		}
 
 		return null;
+	}
+	
+	@GetMapping("/getCustomerByStatus/{status1}/{status2}")
+	public Iterable<Customer> getCustomerByStatus(@PathVariable("status1") String status1,
+			@PathVariable("status2") String status2) {
+		return cs.getCustomerByStatus(status1, status2);
 	}
 
 }

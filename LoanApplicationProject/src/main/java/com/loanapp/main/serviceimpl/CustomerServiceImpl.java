@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loanapp.main.consts.ApplicationStatus;
+import com.loanapp.main.entity.AllPersonalDocuments;
 import com.loanapp.main.entity.Customer;
 import com.loanapp.main.repository.CustomerRepository;
 import com.loanapp.main.servicei.CustomerServiceI;
@@ -30,10 +31,18 @@ public class CustomerServiceImpl implements CustomerServiceI {
 			customer.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
 			return cr.save(customer);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	@Override
+	public Iterable<Customer> getCustomerByStatus(String status1, String status2) {
+		if (status2.length() < 3) {
+			return cr.findAllByApplicationStatus(status1);
+		} else {
+			return cr.findAllByApplicationStatusOrApplicationStatus(status1, status2);
+		}
 	}
 
 }
