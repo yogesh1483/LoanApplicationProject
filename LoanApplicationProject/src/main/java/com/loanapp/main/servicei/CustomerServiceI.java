@@ -11,4 +11,6 @@ public interface CustomerServiceI {
 
 	Iterable<Customer> getCustomerByStatus(String status1, String status2);
 
+	Customer updateCustomerBycustomerId(int customerId, Customer c);
+
 }

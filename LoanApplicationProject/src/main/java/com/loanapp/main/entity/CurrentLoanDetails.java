@@ -30,6 +30,7 @@ public class CurrentLoanDetails {
 	private double totalInterest;
 	private String sanctionDate;
 	private String remark;
+	
 	private String status;
 
 
