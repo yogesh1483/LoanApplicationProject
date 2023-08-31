@@ -34,25 +34,23 @@ public class CustomerServiceImpl implements CustomerServiceI {
 			customer.getAllPersonalDoc().setPhoto(photo.getBytes());
 			customer.getAllPersonalDoc().setSignature(signature.getBytes());
 			customer.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
-			
-			double customerMobileNumber = customer.getCustomerMobileNumber();
-			EnquiryDetails e = cr.findByCustomerMobileNumber(customerMobileNumber);
-			customer.getCibilScore().setCibilScore(e.getCibil().getCibilScore());
-			customer.getCibilScore().setCibilScoreDateTime(String.valueOf(new Date()));
-			customer.getCibilScore().setCibilStatus(e.getCibil().getCibilStatus());
-			customer.getCibilScore().setCibilRemark(e.getCibil().getCibilRemark());
-			customer.getCurrentLoanDetails().setCurrentLoanNumber(e.getEid());
-			
-			customer.getCurrentLoanDetails().setSanctionDate(String.valueOf(new Date()));
-			
-			 Date d=new Date();
-			 
-			 Calendar cale = Calendar.getInstance();
-		        cale.setTime(d);
-		        cale.add(Calendar.DATE, 30);
-		     Date pd = cale.getTime();
-			
-		   customer.getCurrentLoanDetails().getEmiDetails().setNextEmiDueDate(String.valueOf(pd));
+			/*
+			 * double customerMobileNumber = customer.getCustomerMobileNumber();
+			 * EnquiryDetails e = cr.findByCustomerMobileNumber(customerMobileNumber);
+			 * customer.getCibilScore().setCibilScore(e.getCibil().getCibilScore());
+			 * customer.getCibilScore().setCibilScoreDateTime(String.valueOf(new Date()));
+			 * customer.getCibilScore().setCibilStatus(e.getCibil().getCibilStatus());
+			 * customer.getCibilScore().setCibilRemark(e.getCibil().getCibilRemark());
+			 * customer.getCurrentLoanDetails().setCurrentLoanNumber(e.getEid());
+			 * 
+			 * customer.getCurrentLoanDetails().setSanctionDate(String.valueOf(new Date()));
+			 * 
+			 * Date d=new Date();
+			 * 
+			 * Calendar cale = Calendar.getInstance(); cale.setTime(d);
+			 * cale.add(Calendar.DATE, 30); Date pd = cale.getTime();
+			 */			
+		//   customer.getCurrentLoanDetails().getEmiDetails().setNextEmiDueDate(String.valueOf(pd));
 		   customer.setApplicationStatus(Currentloanstatus.INPROCESS.toString());
 		   customer.getCurrentLoanDetails().setRemark("OK");
 		   customer.getCurrentLoanDetails().setStatus(Currentloanstatus.INPROCESS.toString());
