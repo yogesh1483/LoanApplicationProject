@@ -22,7 +22,7 @@ public class EnquiryDetails {
 	private String lastName;
 	private int age;
 	private String email;
-	private long mobileNumber;
+	private long customerMobileNumber;
 	private String pancardNumber;
 	private String enquiryStatus;//CREATED,CIBIL_REQUIRED,CIBIL_OK,CIBIL_REJECT,ACCEPTED
 	@OneToOne(cascade=CascadeType.ALL)

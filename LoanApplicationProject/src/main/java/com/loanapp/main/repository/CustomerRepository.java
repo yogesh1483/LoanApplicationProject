@@ -12,5 +12,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 
 	public Customer findByCustomerId(int customerId);
 
-	public EnquiryDetails findByMobileNumber(double customerMobileNumber);
+	public EnquiryDetails findByCustomerMobileNumber(double mobileNumber);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.loanapp.main.consts.ApplicationStatus;
 import com.loanapp.main.consts.Currentloanstatus;
 import com.loanapp.main.entity.Customer;
+import com.loanapp.main.entity.CustomerAddress;
 import com.loanapp.main.entity.EnquiryDetails;
 import com.loanapp.main.repository.CustomerRepository;
 import com.loanapp.main.servicei.CustomerServiceI;
@@ -25,6 +26,7 @@ public class CustomerServiceImpl implements CustomerServiceI {
 	public Customer setCustomer(Customer customer, MultipartFile addressProof, MultipartFile panCard,
 			MultipartFile addharCard, MultipartFile photo, MultipartFile signature, MultipartFile salarySlips) {
 		try {
+			//Customer All Personal Documents
 			customer.setApplicationStatus(String.valueOf(ApplicationStatus.CREATED));
 			customer.getAllPersonalDoc().setAddressProof(addressProof.getBytes());
 			customer.getAllPersonalDoc().setPanCard(panCard.getBytes());
@@ -33,9 +35,8 @@ public class CustomerServiceImpl implements CustomerServiceI {
 			customer.getAllPersonalDoc().setSignature(signature.getBytes());
 			customer.getAllPersonalDoc().setSalarySlips(salarySlips.getBytes());
 			
-			
 			double customerMobileNumber = customer.getCustomerMobileNumber();
-			EnquiryDetails e = cr.findByMobileNumber(customerMobileNumber);
+			EnquiryDetails e = cr.findByCustomerMobileNumber(customerMobileNumber);
 			customer.getCibilScore().setCibilScore(e.getCibil().getCibilScore());
 			customer.getCibilScore().setCibilScoreDateTime(String.valueOf(new Date()));
 			customer.getCibilScore().setCibilStatus(e.getCibil().getCibilStatus());
