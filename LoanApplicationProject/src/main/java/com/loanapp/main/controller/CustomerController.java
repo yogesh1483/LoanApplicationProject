@@ -1,9 +1,13 @@
 package com.loanapp.main.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +52,7 @@ public class CustomerController {
 			Customer customerdb = cs.setCustomer(customer, addressProof, panCard,
 					addharCard, photo,signature, salarySlips);
 			
+			
 			return new ResponseEntity<BaseResponse<Customer>>(
 			new BaseResponse<Customer>(201, "Customer Created Successfully", new Date(), customerdb),
 					HttpStatus.CREATED);
@@ -58,6 +63,23 @@ public class CustomerController {
 		}
 
 		return null;
+	}
+	
+	@GetMapping("/getPdf/{customerId}")
+	public ResponseEntity<InputStreamResource> genratePdf(@PathVariable int customerId) {
+		
+		ByteArrayInputStream pdfData = cs.getpdf(customerId);
+		HttpHeaders headers= new HttpHeaders();
+		                     // key           // value 
+		   headers.add("Content-Disposition", "inline; filename=abc.pdf");
+		       
+		   
+
+		return ResponseEntity.ok()
+				              .headers(headers)
+				              .contentType(MediaType.APPLICATION_PDF)
+				              .body(new InputStreamResource(pdfData));
+	
 	}
 	
 	//FOR GETTING CUSTOMER DETAILS BY STATUS

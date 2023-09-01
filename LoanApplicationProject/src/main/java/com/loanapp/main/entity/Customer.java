@@ -26,6 +26,7 @@ public class Customer {
 	private String customerEmail;
 	private double customerMobileNumber;
 	private double customerTotalLoanRequired;
+	private byte[] applicationpdf;
 	private String applicationStatus;
 	
 	@OneToOne(cascade=CascadeType.ALL)

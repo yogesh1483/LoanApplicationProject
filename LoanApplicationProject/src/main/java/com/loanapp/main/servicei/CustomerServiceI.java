@@ -1,5 +1,7 @@
 package com.loanapp.main.servicei;
 
+import java.io.ByteArrayInputStream;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.loanapp.main.entity.Customer;
@@ -13,5 +15,7 @@ public interface CustomerServiceI {
 
 	Customer setCustomer(Customer customer, MultipartFile addressProof, MultipartFile panCard, MultipartFile addharCard,
 			MultipartFile photo, MultipartFile signature, MultipartFile salarySlips);
+
+	ByteArrayInputStream getpdf(int customerId);
 
 }
