@@ -194,8 +194,8 @@ public class LoanAppServiceImpl implements LoanAppServiceI {
 				simpleMailMessage.setText("Hello " + updatedEnquiryDetails.getFirstName() + " " + updatedEnquiryDetails.getLastName()
 						+ "Your Loan Enquiry Has Been Reviewed And Your Cibli Score is: "+updatedEnquiryDetails.getCibil().getCibilScore()
 						+"Which is upto Mark and You Are eligible for further Loan Process. Click the "
-						+ "Below link to fill the Loan Application Form"
-						+ "");
+						+ "Below link to fill the Loan Application Form "
+						+ "http://localhost:4200/dash/customer/addCustomer");
 				sender.send(simpleMailMessage);
 			
 				er.save(e);
